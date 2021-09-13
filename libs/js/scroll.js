@@ -1,6 +1,6 @@
 
-$('body').on('scroll', function() {
- var height = $('body').scrollTop();
+$(window).on('scroll', function() {
+ var height = $(window).scrollTop();
  if (height > 100) {
     $('#back-to-top').fadeIn();
  } else {

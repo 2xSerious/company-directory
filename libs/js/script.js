@@ -43,7 +43,8 @@ $(function () {
 
   $(document).on("click", "#back-to-top", function (e) {
     e.preventDefault();
-    $("html, body").animate({ scrollTop: 0 }, 1000);
+    $("html, body").animate({ scrollTop: 0 }, 500);
+    return false;
   });
 });
 
