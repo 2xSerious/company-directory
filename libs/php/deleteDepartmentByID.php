@@ -63,6 +63,7 @@
 	echo json_encode($output);
 } else {
 	echo "Cannot delete this department, Department is already assigned!";
+	mysqli_close($conn);
 }
 
 ?>

@@ -43,7 +43,7 @@ $(function () {
 
   $(document).on("click", "#back-to-top", function (e) {
     e.preventDefault();
-    $("html, body").animate({ scrollTop: 0 }, 0);
+    $("html, body").animate({ scrollTop: 0 }, 1000);
   });
 });
 
@@ -167,11 +167,11 @@ function deletePersonnel() {
           },
           success: function (data) {
             console.log(data);
-
-            if (data.status["code"] == 200) {
+            var json = JSON.parse(data);
+            if (json.status["code"] == 200) {
               element.fadeOut().remove();
             }
-            $.alert("Department has been deleted!")
+            $.alert("Personnel has been deleted!")
           },
         });
       },
@@ -198,7 +198,7 @@ function deleteDepartment(e) {
             id: depId,
           },
           success: function (data) {
-            // console.log(data);
+            console.log(data);
             $(".department-select").find("option:gt(0)").remove();
             getAllDepartments();
             $("#deleteDepartmentForm").trigger("reset");
@@ -265,7 +265,8 @@ function searchQuery(term) {
     },
     success: function (result) {
       $("#inner-cards").empty();
-      let data = result.data.personnel;
+      var json = JSON.parse(result);
+      let data = json.data.personnel;
       createCards(data);
       request = null;
     },
