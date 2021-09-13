@@ -41,7 +41,7 @@ $(function () {
     }
   });
 
-  $(document).on("click", "#back-to-top", function (e) {
+  $("#back-to-top").on("click", function (e) {
     e.preventDefault();
     $("html, body").animate({ scrollTop: 0 }, 500);
     return false;
