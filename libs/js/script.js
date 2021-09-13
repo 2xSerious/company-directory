@@ -1,6 +1,6 @@
 var employeesArr = [];
 var avatarUrl = "./img/avatar.png";
-var searchReqest = null;
+var request;
 var minlength = 3;
 
 $(function () {
@@ -18,7 +18,9 @@ $(function () {
     $("#addEmployeeForm").trigger("reset");
   });
   $(document).on("submit", "#deleteDepartmentForm", deleteDepartment);
-
+  $('#searchInput').autocomplete({
+      source: autoNameArr
+  })
   $(document).on("click", ".update", getPersonnelById);
   $(document).on("keyup", "#searchInput", function () {
     console.log("true");
@@ -26,10 +28,10 @@ $(function () {
     var term = $(this).val();
 
     if (term.length >= minlength) {
-      if (searchReqest != null) {
-        searchReqest.abort();
-      }
-      searchReqest = searchQuery(term);
+      if (request) {
+        request.abort();
+      };
+      request = searchQuery(term);
     } else {
       getAll();
     }
@@ -55,6 +57,7 @@ function getAll() {
     success: function (result) {
       $("#inner-cards").empty();
       let data = result.data;
+      console.log(data);
       createCards(data);
     },
   });
@@ -257,8 +260,6 @@ function getLocation() {
 }
 
 function searchQuery(term) {
-  console.log("query");
-
   $.ajax({
     url: "libs/php/searchTerm.php",
     data: {
@@ -268,6 +269,7 @@ function searchQuery(term) {
       $("#inner-cards").empty();
       let data = result.data.personnel;
       createCards(data);
+      request = null;
     },
   });
 }
