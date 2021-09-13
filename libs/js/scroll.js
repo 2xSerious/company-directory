@@ -1,9 +1,14 @@
+var btn = $('#back-to-btn');
 
 $(window).on('scroll', function() {
- var height = $(window).scrollTop();
- if (height > 100) {
-    $('#back-to-top').fadeIn();
- } else {
-     $('#back-to-top').fadeOut();
- }
-})
+  if ($(window).scrollTop() > 300) {
+    btn.addClass('show-btn');
+  } else {
+    btn.removeClass('show-btn');
+  }
+});
+
+btn.on('click', function(e) {
+  e.preventDefault();
+  $('html, body').animate({scrollTop:0}, '300');
+});

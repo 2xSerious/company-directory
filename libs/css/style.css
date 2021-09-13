@@ -18,11 +18,21 @@ i.bi.bi-arrow-up-circle-fill::before {
   text-shadow: 1px 3px 4px rgba(0, 0, 0, 0.6);
 }
 
-#back-to-top {
+#back-to-btn {
+  display: inline-block;
   position: fixed;
   bottom: 1em;
   right: 0.5em;
-  display: none;
+  -webkit-transition: background-color .3s,  opacity .5s, visibility .5s;
+  transition: background-color .3s,  opacity .5s, visibility .5s;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1000;
+}
+
+#back-to-btn.show-btn {
+  opacity: 1;
+  visibility: visible;
 }
 
 @media screen and (min-width: 992px) {
