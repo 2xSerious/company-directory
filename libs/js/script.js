@@ -18,9 +18,7 @@ $(function () {
     $("#addEmployeeForm").trigger("reset");
   });
   $(document).on("submit", "#deleteDepartmentForm", deleteDepartment);
-  $('#searchInput').autocomplete({
-      source: autoNameArr
-  })
+  
   $(document).on("click", ".update", getPersonnelById);
   $(document).on("keyup", "#searchInput", function () {
     console.log("true");
