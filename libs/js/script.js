@@ -1,9 +1,12 @@
+import smoothscroll from 'smoothscroll-polyfill';
+
 var employeesArr = [];
 var avatarUrl = "./img/avatar.png";
 var request;
 var minlength = 3;
 
 $(function () {
+    smoothscroll.polyfill();
   getAll();
   getAllDepartments();
 
