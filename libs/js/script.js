@@ -1,87 +1,132 @@
-
-
 var employeesArr = [];
 var avatarUrl = "./img/avatar.png";
 var request;
 var minlength = 3;
 var departmentArray = [];
 var buttonPressed;
+var loading = false;
 
 $(function () {
   getAll();
   getAllDepartments();
 
+  // PERSONNEL FORM HANDLERS
   $(document).on("submit", "#addEmployeeForm", createPersonnel);
   $(document).on("submit", "#editEmployeeForm", updatePersonnel);
 
-  $(document).on("click", ".delete",deletePersonnel);
+  $(document).on("click", ".delete", deletePersonnel);
 
   // Department Modal CRUD
   $(document).on("click", "#department-btn", departmentList);
-  $(document).on("click", ".editD", function(){
+  $(document).on("click", ".editD", function () {
     var t = $(this);
     var dataId = t.data("id");
     t.parent().toggleClass("d-none");
     $(`.saveD[data-id="${dataId}"]`).parent().toggleClass("d-none");
-    $(`.name-department[data-id="${dataId}"]`).removeAttr('disabled');
+    $(`.name-department[data-id="${dataId}"]`).removeAttr("disabled");
     $(`select[data-id="${dataId}"]`).removeAttr("disabled");
   });
-  $(document).on("click", ".cancelD", function(){
+  $(document).on("click", ".cancelD", function () {
     var t = $(this);
     var dataId = t.data("id");
     t.parent().toggleClass("d-none");
     $(`.editD[data-id="${dataId}"]`).parent().toggleClass("d-none");
-    $(`.name-department[data-id="${dataId}"]`).attr('disabled', 'disabled');
+    $(`.name-department[data-id="${dataId}"]`).attr("disabled", "disabled");
     $(`select[data-id="${dataId}"]`).attr("disabled", "disabled");
   });
-  $(document).on("click", ".submit-btn", function() {
+
+  // FORM SUBMIT CONTROL
+  $(document).on("click", ".submit-btn", function () {
     buttonPressed = $(this).attr("name");
     console.log(buttonPressed);
   });
-  $(document).on("submit", ".form-save", function(e){
+  // FORM SUBMIT DEPARTMENT
+  $(document).on("click", ".deleteD", function (e) {
     e.preventDefault();
     var t = $(this);
     var dataId = t.data("id");
-    if (buttonPressed === "saveD"){
+    if (buttonPressed === "deleteD") {
+      $.confirm({
+        title: "Delete Department",
+        content: "Delete this department?",
+        buttons: {
+          confirm: function () {
+            deleteDepartment(dataId);
+          },
+          cancel: function () {
+            return;
+          },
+        },
+      });
+    }
+  });
+  $(document).on("submit", ".form-save", function (e) {
+    e.preventDefault();
+    var t = $(this);
+    var dataId = t.data("id");
+    if (buttonPressed === "saveD") {
       updateDepartment(dataId);
     }
   });
-  $(document).on("click", ".deleteD", function(e) {
+
+  $(document).on("submit", "#addNewDepartment", function (e) {
     e.preventDefault();
-    var t = $(this);
-    var dataId = t.data("id");
-    if (buttonPressed === "deleteD"){
-    $.confirm({
-      title: 'Delete Department',
-      content: 'Delete this department?',
-      buttons: {
-        confirm: function() {
-          deleteDepartment(dataId);
-        },
-        cancel: function() {
-          return;
-        }
-      }
-    })
-  }
-  });
-
-
-
-  $(document).on("submit", "#addNewDepartment", function(e){
-    e.preventDefault()
     createDepartment();
     departmentList();
   });
+
+  // FORM SUBMIT LOCATION
+  $(document).on("submit", ".form-loc", function (e) {
+    e.preventDefault();
+    var t = $(this);
+    var dataId = t.data("id");
+
+    if (buttonPressed === "saveL") {
+      $.confirm({
+        title: "Edit Location",
+        content: "Save changes?",
+        buttons: {
+          confirm: function () {
+            updateLocation(dataId);
+          },
+          cancel: function () {
+            return;
+          },
+        },
+      });
+    }
+  });
+  $(document).on("click", ".deleteL", function (e) {
+    e.preventDefault();
+    var t = $(this);
+    var dataId = t.data("id");
+    if (buttonPressed === "deleteL") {
+      $.confirm({
+        title: "Delete Location",
+        content: "Delete this location?",
+        buttons: {
+          confirm: function () {
+            deleteLocation(dataId);
+          },
+          cancel: function () {
+            return;
+          },
+        },
+      });
+    }
+  });
+  $(document).on("submit", "#addNewLocation", function (e) {
+    e.preventDefault();
+    createLocation();
+  });
+
   $(document).on("click", " #employee-btn", function () {
     $("#addEmployeeForm").trigger("reset");
     getAllDepartments();
   });
- 
 
   $(document).on("click", ".update", getPersonnelById);
   $(document).on("keyup", "#searchInput", function () {
-    console.log("true");
     // var that = this;
     var term = $(this).val();
 
@@ -100,6 +145,28 @@ $(function () {
       getAll();
     }
   });
+
+  // LOCATION HANDLERS
+  $(document).on("click", "#location-btn", function () {
+    locationList();
+  });
+  $(document).on("click", ".editL", function () {
+    var t = $(this);
+    var dataId = t.data("id");
+    t.parent().toggleClass("d-none");
+    $(`.saveL[data-id="${dataId}"]`).parent().toggleClass("d-none");
+    $(`.name-location[data-id="${dataId}"]`).removeAttr("disabled");
+  });
+  $(document).on("click", ".cancelL", function () {
+    var t = $(this);
+    var dataId = t.data("id");
+    t.parent().toggleClass("d-none");
+    $(`.editL[data-id="${dataId}"]`).parent().toggleClass("d-none");
+    $(`.name-location[data-id="${dataId}"]`).attr("disabled", "disabled");
+  });
+
+  //PRELOADER
+  $("#preloader").removeClass("d-flex").addClass("d-none");
 });
 
 function getAll() {
@@ -181,60 +248,58 @@ function departmentList() {
 }
 
 function deleteDepartment(id) {
-        
-        $.ajax({
-          url: "libs/php/deleteDepartmentByID.php",
-          type: "POST",
-          cache: false,
-          data: {
-            id: id,
-          },
-          success: function (result) {
-            var data = result.status;
-            if(data.code === "400"){
-              $.alert(data.description);
-              return;
-            }
+  $.ajax({
+    url: "libs/php/deleteDepartmentByID.php",
+    type: "POST",
+    cache: false,
+    data: {
+      id: id,
+    },
+    success: function (result) {
+      var data = result.status;
+      if (data.code === "400") {
+        $.alert(data.description);
+        return;
+      }
 
-            $(`.form-save[data-id="${id}"]`).remove();
-            $(".department-select").find("option:gt(0)").remove();
-            $.alert("Deleted!");
-            getAllDepartments();
-          },
-          error: function(response, status, error) {
-              $.alert(response.responseText);
-          }
-        });
+      $(`.form-save[data-id="${id}"]`).remove();
+      $(".department-select").find("option:gt(0)").remove();
+      $.alert("Deleted!");
+      getAllDepartments();
+    },
+    error: function (response, status, error) {
+      $.alert(response.responseText);
+    },
+  });
 }
 
 function updateDepartment(id) {
- $.confirm({
-   title: 'Edit Department',
-   content: 'Save changes?',
-   buttons: {
-     confirm: function() {
-      $.ajax({
-        url: "libs/php/updateDepartment.php",
-        type: "POST",
-        cache: false,
-        data: 
-          $(`form[data-id="${id}"]`).serialize() +
-                `&id=${$(`form[data-id="${id}"]`).data("id")}`,
-        success: function(result) {
-          departmentList();
+  $.confirm({
+    title: "Edit Department",
+    content: "Save changes?",
+    buttons: {
+      confirm: function () {
+        $.ajax({
+          url: "libs/php/updateDepartment.php",
+          type: "POST",
+          cache: false,
+          data:
+            $(`form[data-id="${id}"]`).serialize() +
+            `&id=${$(`form[data-id="${id}"]`).data("id")}`,
+          success: function (result) {
+            departmentList();
           },
-        error: function(req, status, error) {
-          console.log(req);
-        }
+          error: function (req, status, error) {
+            console.log(req);
+          },
         });
-     },
-     cancel: function() {
-       return;
-     }
-   }
- });
-  
-  }
+      },
+      cancel: function () {
+        return;
+      },
+    },
+  });
+}
 
 function getLocation() {
   $(".locationId").find("option").not(":first").remove();
@@ -293,7 +358,7 @@ function createDepartment() {
         $.alert(data.description);
         return;
       }
-      $.alert("Department added.")
+      $.alert("Department added.");
       $("#addNewDepartment").trigger("reset");
       getAllDepartments();
     },
@@ -316,7 +381,7 @@ function getPersonnelById() {
       $('input[name="lastName"').val(p.lastName);
       $('input[name="email"]').val(p.email);
       $('input[name="jobTitle]').val(p.jobTitle);
-      $('#selectDepartmentEdit').val(p.departmentID);
+      $("#selectDepartmentEdit").val(p.departmentID);
       $("#editEmployeeForm").data("id", p.id);
     },
   });
@@ -370,7 +435,7 @@ function deletePersonnel() {
             id: id,
           },
           success: function (data) {
-            var stringify = JSON.stringify(data)
+            var stringify = JSON.stringify(data);
             var json = JSON.parse(stringify);
             if (json.status["code"] !== "200") {
               $.alert("Personnel cannot be deleted.");
@@ -378,15 +443,111 @@ function deletePersonnel() {
             }
             element.fadeOut().remove();
             $.alert("Personnel has been deleted!");
-            $('#searchForm').trigger("reset");
+            $("#searchForm").trigger("reset");
             getAll();
-            
           },
         });
       },
       cancel: function () {
         return;
       },
+    },
+  });
+}
+function createLocation() {
+  $.ajax({
+    url: "libs/php/addLocation.php",
+    type: "POST",
+    cache: false,
+    data: $("#addNewLocation").serialize(),
+    success: function (result) {
+      var json = JSON.parse(result);
+      var data = json.status;
+
+      if (data.code === "400") {
+        $.alert(data.description);
+        $("#addNewLocation").trigger("reset");
+        return;
+      }
+      locationList();
+      $("#addNewLocation").trigger("reset");
+    },
+    error: function (req, status, err) {
+      console.log(req.responseText);
+    },
+  });
+}
+function updateLocation(id) {
+  $.ajax({
+    url: "libs/php/updateLocation.php",
+    type: "POST",
+    cache: false,
+    data:
+      $(`.form-loc[data-id="${id}"]`).serialize() +
+      `&id=${$(`.form-loc[data-id="${id}"]`).data("id")}`,
+    success: function (result) {
+      locationList();
+      getAll();
+    },
+    error: function (req, status, error) {
+      console.log(req.responseText);
+    },
+  });
+}
+function deleteLocation(id) {
+  $.ajax({
+    url: "libs/php/deleteLocation.php",
+    type: "POST",
+    data: {
+      id: id,
+    },
+    success: function (result) {
+      console.log(result);
+      var json = JSON.parse(result);
+      var status = json.status;
+      if (status.code === "400") {
+        $.alert(status.description);
+        return;
+      }
+      locationList();
+    },
+    error: function (req, status, err) {
+      console.log(req.responseText);
+    },
+  });
+}
+
+function locationList() {
+  $("#locationsList").empty();
+  $.ajax({
+    url: "libs/php/getLocations.php",
+    dataType: "json",
+    success: function (result) {
+      var data = result.data;
+
+      data.forEach((e) => {
+        $("#locationsList").append(`
+        <form class="row g-2 p-1 form-loc"  data-id="${e.id}">
+        <div class="col ">
+            
+                <input name="l-name" type="text" class="form-control name-location" placeholder="Location" aria-label="Department" data-id="${e.id}" value="${e.name}" disabled required>
+            
+        </div>
+        
+        
+          <div class="col-sm pb-2 pb-sm-0 btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
+            <button type="button" class="btn btn-outline-secondary btn-sm editL" data-id="${e.id}">Edit</button>
+            <button type="submit" name="deleteL" class="btn btn-outline-danger btn-sm deleteL submit-btn" data-id="${e.id}">Delete</button>
+          
+          </div>
+          <div class="d-none col-sm pb-2 pb-sm-0 btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
+            <button type="submit" name="saveL" class="btn btn-success btn-sm saveL submit-btn" data-id="${e.id}">Save</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm cancelL" data-id="${e.id}">Cancel</button>
+          </div>
+          <hr class="d-sm-none">
+         </form>
+        `);
+      });
     },
   });
 }

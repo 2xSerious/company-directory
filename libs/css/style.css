@@ -31,6 +31,13 @@ i.bi.bi-arrow-up-circle-fill::before {
   text-shadow: 1px 3px 4px rgba(0, 0, 0, 0.6);
 }
 
+#spinner {
+  width: 8vw;
+  height: 8vw;
+  color: white;
+  margin-top: 20vw;
+}
+
 #back-to-btn {
   display: inline-block;
   position: fixed;

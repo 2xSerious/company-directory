@@ -6,8 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Company Directory</title>
     <link rel="stylesheet" href="./libs/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="./node_modules/jquery-confirm/dist/jquery-confirm.min.css">
+    <link
+      rel="stylesheet"
+      href="./node_modules/bootstrap-icons/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="./node_modules/jquery-confirm/dist/jquery-confirm.min.css"
+    />
     <link rel="stylesheet" href="./libs/css/style.css" />
   </head>
   <body>
@@ -23,7 +29,7 @@
             p
           "
         >
-          <a href="/" ><img src="img/logo.png" width="200" alt="logo" /></a>
+          <a href="/"><img src="img/logo.png" width="200" alt="logo" /></a>
           <div class="w-50">
             <form id="searchForm">
               <input
@@ -36,19 +42,42 @@
             </form>
           </div>
           <div class="btn-group mb-2 mb-lg-0" role="group">
-            <button type="button"  id="employee-btn" class="btn btn-outline-warning mt-3 mt-lg-0" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
-              Add Employee
-            </button><button id="department-btn" type="button" class="btn btn-outline-warning mt-3 mt-lg-0" data-bs-toggle="modal" data-bs-target="#departmentModal">
-                Deparment
-              </button>
-              <button id="location-btn" type="button" class="btn btn-outline-warning mt-3 mt-lg-0"  data-bs-toggle="modal" data-bs-target="#departmentModal">
-                Location
-              </button>
+            <button
+              type="button"
+              id="employee-btn"
+              class="btn btn-outline-warning mt-3 mt-lg-0"
+              data-bs-toggle="modal"
+              data-bs-target="#addEmployeeModal"
+            >
+              Add Employee</button
+            ><button
+              id="department-btn"
+              type="button"
+              class="btn btn-outline-warning mt-3 mt-lg-0"
+              data-bs-toggle="modal"
+              data-bs-target="#departmentModal"
+            >
+              Deparment
+            </button>
+            <button
+              id="location-btn"
+              type="button"
+              class="btn btn-outline-warning mt-3 mt-lg-0"
+              data-bs-toggle="modal"
+              data-bs-target="#locationModal"
+            >
+              Location
+            </button>
           </div>
         </div>
       </div>
     </header>
     <main>
+      <div id="preloader" class="d-flex justify-content-center">
+        <div id="spinner" class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
       <div class="container">
         <div
           id="inner-cards"
@@ -63,7 +92,7 @@
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
-        data-bs-backdrop="static" 
+        data-bs-backdrop="static"
         data-bs-keyboard="false"
       >
         <div class="modal-dialog">
@@ -78,46 +107,88 @@
               ></button>
             </div>
             <div class="modal-body">
-                <form id="addEmployeeForm">
-                    <img class="rounded mx-auto mb-1 d-block" src="img/avatar.png" alt="avatar-logo" width="100" />
-                    <div class="row g-2">
-                        <div class="col-md p-1">
-                            <div class="form-floating" >
-                                <input name="firstName" type="text" id="fnameInput" class="form-control" placeholder="Your first name" aria-label="First Name" required>
-                                <label for="fnameInput">First Name</label>
-                            </div>
-                        </div>
-                        <div class="col-md p-1">
-                            <div class="form-floating">
-                                <input name="lastName" type="text" id="lnameInput" class="form-control" placeholder="Your last name" aria-label="Last Name" required>
-                                <label for="lnameInput">Last Name</label>
-                            </div>
-                        </div>
+              <form id="addEmployeeForm">
+                <img
+                  class="rounded mx-auto mb-1 d-block"
+                  src="img/avatar.png"
+                  alt="avatar-logo"
+                  width="100"
+                />
+                <div class="row g-2">
+                  <div class="col-md p-1">
+                    <div class="form-floating">
+                      <input
+                        name="firstName"
+                        type="text"
+                        id="fnameInput"
+                        class="form-control"
+                        placeholder="Your first name"
+                        aria-label="First Name"
+                        required
+                      />
+                      <label for="fnameInput">First Name</label>
                     </div>
-                    
-                    <div class="row g-2">
-                        <div class="col-md p-1">
-                            <div class="form-floating">
-                                <input name="email" type="email" id="emailInput" class="form-control" placeholder="Your email address" aria-label="Email" required>
-                                <label for="emailInput">Email</label>
-                            </div>
-                        </div>
-                        <div class="col-md p-1">
-                            <div class="form-floating">
-                                <input name="jobTitle" type="text" id="jobTitleInput" class="form-control" placeholder="Job Tittle" aria-label="Job Title" >
-                                <label for="jobTitleInput">Job Title</label>
-                            </div>
-                        </div>
+                  </div>
+                  <div class="col-md p-1">
+                    <div class="form-floating">
+                      <input
+                        name="lastName"
+                        type="text"
+                        id="lnameInput"
+                        class="form-control"
+                        placeholder="Your last name"
+                        aria-label="Last Name"
+                        required
+                      />
+                      <label for="lnameInput">Last Name</label>
                     </div>
+                  </div>
+                </div>
 
-                    <div class="row g-2">
-                        <div class="col-md p-1">
-                                <select name="departmentId" id="selectDepartment" class="form-select department-select" aria-label="Department" required>
-                                    <option selected value="">Department</option>
-                                </select>
-                        </div>
+                <div class="row g-2">
+                  <div class="col-md p-1">
+                    <div class="form-floating">
+                      <input
+                        name="email"
+                        type="email"
+                        id="emailInput"
+                        class="form-control"
+                        placeholder="Your email address"
+                        aria-label="Email"
+                        required
+                      />
+                      <label for="emailInput">Email</label>
                     </div>
-                </form>
+                  </div>
+                  <div class="col-md p-1">
+                    <div class="form-floating">
+                      <input
+                        name="jobTitle"
+                        type="text"
+                        id="jobTitleInput"
+                        class="form-control"
+                        placeholder="Job Tittle"
+                        aria-label="Job Title"
+                      />
+                      <label for="jobTitleInput">Job Title</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row g-2">
+                  <div class="col-md p-1">
+                    <select
+                      name="departmentId"
+                      id="selectDepartment"
+                      class="form-select department-select"
+                      aria-label="Department"
+                      required
+                    >
+                      <option selected value="">Department</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
             </div>
             <div class="modal-footer">
               <button
@@ -127,7 +198,11 @@
               >
                 Close
               </button>
-              <button type="submit" class="btn btn-warning" form="addEmployeeForm">
+              <button
+                type="submit"
+                class="btn btn-warning"
+                form="addEmployeeForm"
+              >
                 Add Employee
               </button>
             </div>
@@ -142,7 +217,7 @@
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
-        data-bs-backdrop="static" 
+        data-bs-backdrop="static"
         data-bs-keyboard="false"
       >
         <div class="modal-dialog">
@@ -157,45 +232,88 @@
               ></button>
             </div>
             <div class="modal-body">
-                <form id="editEmployeeForm" data-id="">
-                    <img class="rounded mx-auto mb-1 d-block" src="img/avatar.png" alt="avatar-logo" width="100" />
-                    <div class="row g-2">
-                        <div class="col-md p-1">
-                            <div class="form-floating" >
-                                <input name="firstName" type="text" id="fnameInput" class="form-control" placeholder="Your first name" aria-label="First Name" value="" required>
-                                <label for="fnameInput">First Name</label>
-                            </div>
-                        </div>
-                        <div class="col-md p-1">
-                            <div class="form-floating">
-                                <input name="lastName" type="text" id="lnameInput" class="form-control" placeholder="Your last name" aria-label="Last Name" required>
-                                <label for="lnameInput">Last Name</label>
-                            </div>
-                        </div>
+              <form id="editEmployeeForm" data-id="">
+                <img
+                  class="rounded mx-auto mb-1 d-block"
+                  src="img/avatar.png"
+                  alt="avatar-logo"
+                  width="100"
+                />
+                <div class="row g-2">
+                  <div class="col-md p-1">
+                    <div class="form-floating">
+                      <input
+                        name="firstName"
+                        type="text"
+                        id="fnameInput"
+                        class="form-control"
+                        placeholder="Your first name"
+                        aria-label="First Name"
+                        value=""
+                        required
+                      />
+                      <label for="fnameInput">First Name</label>
                     </div>
-                    
-                    <div class="row g-2">
-                        <div class="col-md p-1">
-                            <div class="form-floating">
-                                <input name="email" type="email" id="emailInput" class="form-control" placeholder="Your email address" aria-label="Email" required>
-                                <label for="emailInput">Email</label>
-                            </div>
-                        </div>
-                        <div class="col-md p-1">
-                            <div class="form-floating">
-                                <input name="jobTitle" type="text" id="jobTitleInput" class="form-control" placeholder="Job Tittle" aria-label="Job Title" >
-                                <label for="jobTitleInput">Job Title</label>
-                            </div>
-                        </div>
+                  </div>
+                  <div class="col-md p-1">
+                    <div class="form-floating">
+                      <input
+                        name="lastName"
+                        type="text"
+                        id="lnameInput"
+                        class="form-control"
+                        placeholder="Your last name"
+                        aria-label="Last Name"
+                        required
+                      />
+                      <label for="lnameInput">Last Name</label>
                     </div>
-                    <div class="row g-2">
-                        <div class="col-md p-1">
-                                <select name="departmentId" id="selectDepartmentEdit" class="form-select department-select" aria-label="Department" required>
-                                    <option selected value="">Department</option>
-                                </select>
-                        </div>
+                  </div>
+                </div>
+
+                <div class="row g-2">
+                  <div class="col-md p-1">
+                    <div class="form-floating">
+                      <input
+                        name="email"
+                        type="email"
+                        id="emailInput"
+                        class="form-control"
+                        placeholder="Your email address"
+                        aria-label="Email"
+                        required
+                      />
+                      <label for="emailInput">Email</label>
                     </div>
-                </form>
+                  </div>
+                  <div class="col-md p-1">
+                    <div class="form-floating">
+                      <input
+                        name="jobTitle"
+                        type="text"
+                        id="jobTitleInput"
+                        class="form-control"
+                        placeholder="Job Tittle"
+                        aria-label="Job Title"
+                      />
+                      <label for="jobTitleInput">Job Title</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row g-2">
+                  <div class="col-md p-1">
+                    <select
+                      name="departmentId"
+                      id="selectDepartmentEdit"
+                      class="form-select department-select"
+                      aria-label="Department"
+                      required
+                    >
+                      <option selected value="">Department</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
             </div>
             <div class="modal-footer">
               <button
@@ -205,7 +323,11 @@
               >
                 Close
               </button>
-              <button type="submit" class="btn btn-warning" form="editEmployeeForm">
+              <button
+                type="submit"
+                class="btn btn-warning"
+                form="editEmployeeForm"
+              >
                 Save
               </button>
             </div>
@@ -215,88 +337,157 @@
 
       <!-- Modal Add Department -->
       <div
-      class="modal fade"
-      id="departmentModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-      data-bs-backdrop="static" 
-      data-bs-keyboard="false"
-    >
-      <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Departments</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <img class="rounded mx-auto mb-1 d-block" src="img/departmentIcon.png" alt="departments-logo" width="100" />
-            <form id="addNewDepartment" data-id="">
-              <div class="row g-2">
-                  <div class="col ">
-                          <input name="dName" type="text" id="dnameNew" class="form-control" placeholder="Department" aria-label="Department" value="" required>
+        class="modal fade"
+        id="departmentModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+      >
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Departments</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <img
+                class="rounded mx-auto mb-1 d-block"
+                src="img/departmentIcon.png"
+                alt="departments-logo"
+                width="100"
+              />
+              <form id="addNewDepartment" data-id="">
+                <div class="row g-2">
+                  <div class="col">
+                    <input
+                      name="dName"
+                      type="text"
+                      id="dnameNew"
+                      class="form-control"
+                      placeholder="Department"
+                      aria-label="Department"
+                      value=""
+                      required
+                    />
                   </div>
-                  <div class="col ">
-                    <select name="locationId" class="form-select locationId" aria-label="Location" required>
+                  <div class="col">
+                    <select
+                      name="locationId"
+                      class="form-select locationId"
+                      aria-label="Location"
+                      required
+                    >
                       <option selected value="">Location</option>
                     </select>
                   </div>
                   <div class="col d-grid gap-2">
-                  <button type="submit" class="btn btn-success btn-sm" id="del-department-btn" form="addNewDepartment" aria-disabled="true">
-                    Add
-                  </button>
+                    <button
+                      type="submit"
+                      class="btn btn-success btn-sm"
+                      id="del-department-btn"
+                      form="addNewDepartment"
+                      aria-disabled="true"
+                    >
+                      Add
+                    </button>
+                  </div>
                 </div>
-              </div>
-          </form>
-          <hr>
-              <div id="departmentsList">
-                  
-                  <!-- <div class="row g-2">
-                      <div class="col ">
-                          
-                              <input name="dName" type="text" class="form-control dnameInput" placeholder="Department" aria-label="Department" value="" required>
-                          
-                      </div>
-                      <div class="col ">
-                          <select name="locationId"  class="form-select locationId" aria-label="Location" required>
-                            
-                          </select>
-                      </div> -->
-                      <!-- <button type="submit" class=" col btn btn-success" form="addDepartmentForm">
-                        Add
-                      </button> -->
-<!--                       
-                      <div class="col btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-                        <button type="button" class="btn btn-outline-secondary btn-sm">Edit</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
-                      </div>
-                  
-                </div>
-              </div> -->
-                
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            
+              </form>
+              <hr />
+              <div id="departmentsList"></div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <!-- LOCATION MODAL -->
+      <div
+        class="modal fade"
+        id="locationModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Locations</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <img
+                class="rounded mx-auto mb-1 d-block"
+                src="img/cityIcon.png"
+                alt="locations-logo"
+                width="100"
+              />
+              <form id="addNewLocation" data-id="">
+                <div class="row g-2">
+                  <div class="col">
+                    <input
+                      name="lName"
+                      type="text"
+                      id="lnameNew"
+                      class="form-control"
+                      placeholder="Location"
+                      aria-label="Location"
+                      value=""
+                      required
+                    />
+                  </div>
+                  <div class="col d-grid gap-2">
+                    <button
+                      type="submit"
+                      class="btn btn-success btn-sm"
+                      id="add-location-btn"
+                      form="addNewLocation"
+                      aria-disabled="true"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <hr />
+              <div id="locationsList"></div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    
-      <a class="btn btn-floating" id="back-to-btn"><i class="bi bi-arrow-up-circle-fill" ></i></a>
-   
+      <a class="btn btn-floating" id="back-to-btn"
+        ><i class="bi bi-arrow-up-circle-fill"></i
+      ></a>
     </main>
     <script src="./libs/js/bootstrap.min.js"></script>
     <script src="./libs/js/jquery-3.6.0.min.js"></script>
