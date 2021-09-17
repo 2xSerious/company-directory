@@ -38,7 +38,6 @@ $(function () {
   // FORM SUBMIT CONTROL
   $(document).on("click", ".submit-btn", function () {
     buttonPressed = $(this).attr("name");
-    console.log(buttonPressed);
   });
   // FORM SUBMIT DEPARTMENT
   $(document).on("click", ".deleteD", function (e) {
@@ -360,6 +359,7 @@ function createDepartment() {
       $.alert("Department added.");
       $("#addNewDepartment").trigger("reset");
       getAllDepartments();
+      departmentList();
     },
     error: function (request, status, error) {
       alert(request.responseText);
