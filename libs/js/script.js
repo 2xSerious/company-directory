@@ -550,15 +550,14 @@ function locationList() {
 }
 
 function searchQuery(term) {
+  $("#inner-cards").empty();
   $.ajax({
     url: "libs/php/searchTerm.php",
     data: {
       q: term,
     },
     success: function (result) {
-      $("#inner-cards").empty();
-      var stringify = JSON.stringify(result);
-      var json = JSON.parse(stringify);
+      var json = JSON.parse(result);
       let data = json.data.personnel;
       createCards(data);
       request = null;
