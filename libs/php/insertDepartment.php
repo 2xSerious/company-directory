@@ -36,11 +36,22 @@
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
 	$department = $_POST['dName'];
-	$check = mysqli_query($conn,"SELECT * from department WHERE name='".$department."'");
-	$count = mysqli_num_rows($check);
+	$check = mysqli_query($conn,"SELECT COUNT(id) as dc FROM department WHERE name='".$department."'");
+	while($data=mysqli_fetch_array($check)){
+		$count = $data['dc'];
+		}
+
 	if ($count > 0) {
-		echo "Department already exist";
-        mysqli_close($conn);
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "Department already exist!";	
+		$output['data'] = [];
+
+		mysqli_close($conn);
+
+		echo json_encode($output); 
+
+		exit;
 	}
 
 	$query = $conn->prepare('INSERT INTO department (name, locationID) VALUES(?,?)');

@@ -1,5 +1,18 @@
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color: #525252;
+  z-index: 1000;
 }
 
 body {
@@ -38,6 +51,12 @@ i.bi.bi-arrow-up-circle-fill::before {
 @media screen and (min-width: 992px) {
   i.bi.bi-arrow-up-circle-fill::before {
     font-size: 2.5em;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .card-header > img, .card-header > h6, .card-body {
+    display: none;
   }
 }
 /*# sourceMappingURL=style.css.map */

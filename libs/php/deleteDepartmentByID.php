@@ -27,7 +27,24 @@
 
 	}	
 
+	$id = $_POST['id'];
+	$check = mysqli_query($conn,"SELECT count(id) as pc FROM personnel WHERE departmentID = '".$id."' ");
 	
+	while($data=mysqli_fetch_array($check)){
+		$count = $data['pc'];
+		}
+	if($count > 0){
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "Department cannot be deleted!";	
+		$output['data'] = [];
+
+		mysqli_close($conn);
+
+		echo json_encode($output); 
+
+		exit;
+	} 
 
 	$query = $conn->prepare('DELETE FROM department WHERE id = ?');
 	
@@ -35,7 +52,7 @@
 
 	$query->execute();
 	
-	if(mysqli_affected_rows($conn) > 0) {
+	
 	
 	if (false === $query) {
 
@@ -61,9 +78,6 @@
 	mysqli_close($conn);
 
 	echo json_encode($output);
-} else {
-	echo "Cannot delete this department, Department is already assigned!";
-	mysqli_close($conn);
-}
+
 
 ?>

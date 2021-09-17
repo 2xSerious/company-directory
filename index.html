@@ -41,6 +41,9 @@
             </button><button id="department-btn" type="button" class="btn btn-outline-warning mt-3 mt-lg-0" data-bs-toggle="modal" data-bs-target="#departmentModal">
                 Deparment
               </button>
+              <button id="location-btn" type="button" class="btn btn-outline-warning mt-3 mt-lg-0"  data-bs-toggle="modal" data-bs-target="#departmentModal">
+                Location
+              </button>
           </div>
         </div>
       </div>
@@ -220,7 +223,7 @@
       data-bs-backdrop="static" 
       data-bs-keyboard="false"
     >
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Departments</h5>
@@ -232,38 +235,50 @@
             ></button>
           </div>
           <div class="modal-body">
-              <form id="addDepartmentForm">
-                  <img class="rounded mx-auto mb-1 d-block" src="img/departmentIcon.png" alt="departments-logo" width="100" />
-                  <div class="row g-2">
-                      <div class=" p-1">
-                          <div class="form-floating" >
-                              <input name="dName" type="text" id="dnameInput" class="form-control" placeholder="Department" aria-label="Department" value="" required>
-                              <label for="fnameInput">Department</label>
-                          </div>
+            <img class="rounded mx-auto mb-1 d-block" src="img/departmentIcon.png" alt="departments-logo" width="100" />
+            <form id="addNewDepartment" data-id="">
+              <div class="row g-2">
+                  <div class="col ">
+                          <input name="dName" type="text" id="dnameNew" class="form-control" placeholder="Department" aria-label="Department" value="" required>
+                  </div>
+                  <div class="col ">
+                    <select name="locationId" class="form-select locationId" aria-label="Location" required>
+                      <option selected value="">Location</option>
+                    </select>
+                  </div>
+                  <div class="col d-grid gap-2">
+                  <button type="submit" class="btn btn-success btn-sm" id="del-department-btn" form="addNewDepartment" aria-disabled="true">
+                    Add
+                  </button>
+                </div>
+              </div>
+          </form>
+          <hr>
+              <div id="departmentsList">
+                  
+                  <!-- <div class="row g-2">
+                      <div class="col ">
+                          
+                              <input name="dName" type="text" class="form-control dnameInput" placeholder="Department" aria-label="Department" value="" required>
+                          
                       </div>
-                      <div class=" p-1">
-                          <select name="locationId" id="selectLocationId" class="form-select" aria-label="Location" required>
-                            <option selected value="">Location</option>
+                      <div class="col ">
+                          <select name="locationId"  class="form-select locationId" aria-label="Location" required>
+                            
                           </select>
-                      </div>
-                      <button type="submit" class="btn btn-success" form="addDepartmentForm">
+                      </div> -->
+                      <!-- <button type="submit" class=" col btn btn-success" form="addDepartmentForm">
                         Add
-                      </button>
-                  </div>
-                </form>
-                <hr>
-                <form id="deleteDepartmentForm" data-id="">
-                  <div class="row g-2">
-                      <div class="col-md p-1">
-                              <select name="departmentId" id="selectDepartmentDelete" class="form-select department-select" aria-label="Department" required>
-                                  <option selected value="">Department</option>
-                              </select>
+                      </button> -->
+<!--                       
+                      <div class="col btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
+                        <button type="button" class="btn btn-outline-secondary btn-sm">Edit</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
                       </div>
-                      <button type="submit" class="btn btn-danger" id="del-department-btn" form="deleteDepartmentForm">
-                        Delete
-                      </button>
-                  </div>
-              </form>
+                  
+                </div>
+              </div> -->
+                
           </div>
           <div class="modal-footer">
             <button

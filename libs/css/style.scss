@@ -1,11 +1,22 @@
+* {
+  box-sizing: border-box;
+}
+
 html {
     scroll-behavior: smooth;
+  }
+  header {
+    position: sticky;
+    top:0;
+    background-color: #525252;
+    z-index: 1000;
   }
 body {
     padding: 0;
     margin: 0;
     background-color: #525252;
 }
+
 
 .card.border-warning {
     width: 15px;
@@ -16,6 +27,7 @@ i.bi.bi-arrow-up-circle-fill::before {
     text-shadow: 1px 3px 4px rgba(0,0,0,0.6);
     
 }
+
 
 #back-to-btn {
     display: inline-block;
@@ -42,3 +54,9 @@ i.bi.bi-arrow-up-circle-fill::before {
         
     }
 }
+@media screen and (max-width:768px) {
+  .card-header >img, .card-header > h6 , .card-body{
+    display: none;
+  }
+}
+  
