@@ -253,8 +253,9 @@ function deleteDepartment(id) {
       id: id,
     },
     success: function (result) {
-      var data = result.status;
-      if (data.code === "400") {
+      var json = JSON.parse(result);
+      var status = json.status;
+      if (status.code === "400") {
         $.alert(data.description);
         return;
       }
@@ -285,6 +286,7 @@ function updateDepartment(id) {
             `&id=${$(`form[data-id="${id}"]`).data("id")}`,
           success: function (result) {
             departmentList();
+            getAll();
           },
           error: function (req, status, error) {
             console.log(req);
@@ -330,7 +332,7 @@ function createPersonnel(e) {
     data: $("#addEmployeeForm").serialize(),
     cache: false,
     success: function (data) {
-      $.alert("Personel Added");
+      $.alert("Personnel Added");
       getAll();
       $(".department-select").find("option:gt(0)").remove();
       getAllDepartments();
@@ -349,9 +351,10 @@ function createDepartment() {
     data: $("#addNewDepartment").serialize(),
     cache: false,
     success: function (result) {
-      var data = result.status;
-      if (data.code === "400") {
-        $.alert(data.description);
+      var json = JSON.parse(result);
+      var status = json.status;
+      if (status.code === "400") {
+        $.alert(status.description);
         return;
       }
       $.alert("Department added.");
