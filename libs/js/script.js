@@ -176,7 +176,6 @@ function getAll() {
     success: function (result) {
       $("#inner-cards").empty();
       let data = result.data;
-      console.log(data);
       createCards(data);
     },
   });
@@ -188,7 +187,6 @@ function getAllDepartments() {
     dataType: "json",
     success: function (result) {
       let data = result.data;
-      console.log(result);
       data.sort((a, b) => a.name.localeCompare(b.name));
       $(".department-select").find("option:gt(0)").remove();
       data.forEach((element) => {
@@ -206,7 +204,6 @@ function departmentList() {
     dataType: "json",
     success: function (result) {
       let data = result.data;
-      console.log(data);
       data.sort((a, b) => a.name.localeCompare(b.name));
       data.forEach((element) => {
         $("#departmentsList").append(`
@@ -308,7 +305,6 @@ function getLocation() {
     url: "libs/php/getLocations.php",
     dataType: "json",
     success: function (data) {
-      console.log(data);
       var result = data.data;
       result.forEach((element) => {
         $(".locationId").append(
@@ -402,7 +398,6 @@ function updatePersonnel(e) {
             `&id=${$("#editEmployeeForm").data("id")}`,
           cache: false,
           success: function (data) {
-            console.log(data);
             getAll();
             $.alert("Details updated successfully!");
           },
@@ -502,7 +497,6 @@ function deleteLocation(id) {
       id: id,
     },
     success: function (result) {
-      console.log(result);
       var json = JSON.parse(result);
       var status = json.status;
       if (status.code === "400") {
