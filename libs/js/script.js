@@ -41,11 +41,15 @@ $(function () {
   $(document).on("click", ".editD", function () {
     var t = $(this);
     var dataId = t.data("id");
+    var val = $(`.name-department[data-id="${dataId}"]`).val();
     t.parent().toggleClass("d-none");
     $(`.saveD[data-id="${dataId}"]`).parent().toggleClass("d-none");
     $(`.name-department[data-id="${dataId}"]`).removeAttr("disabled");
     $(`select[data-id="${dataId}"]`).removeAttr("disabled");
-    $(`input[data-id="${dataId}"]`).trigger("focus");
+    $(`.name-department[data-id="${dataId}"]`)
+      .trigger("focus")
+      .val("")
+      .val(val);
   });
   $(document).on("click", ".cancelD", function () {
     var t = $(this);
@@ -151,10 +155,11 @@ $(function () {
   $(document).on("click", ".editL", function () {
     var t = $(this);
     var dataId = t.data("id");
+    var num = $(`.name-location[data-id="${dataId}"]`).val();
     t.parent().toggleClass("d-none");
     $(`.saveL[data-id="${dataId}"]`).parent().toggleClass("d-none");
     $(`.name-location[data-id="${dataId}"]`).removeAttr("disabled");
-    $(`input[data-id="${dataId}"]`).trigger("focus");
+    $(`.name-location[data-id="${dataId}"]`).trigger("focus").val("").val(num);
   });
   $(document).on("click", ".cancelL", function () {
     var t = $(this);
@@ -162,6 +167,7 @@ $(function () {
     t.parent().toggleClass("d-none");
     $(`.editL[data-id="${dataId}"]`).parent().toggleClass("d-none");
     $(`.name-location[data-id="${dataId}"]`).attr("disabled", "disabled");
+    $(`.name-location[data-id="${dataId}"]`).trigger("reset");
   });
 
   //PRELOADER
