@@ -10,6 +10,23 @@ $(function () {
   getAll();
   getAllDepartments();
 
+  // BLUR modal buttons
+
+  $("#departmentModal").on("shown.bs.modal", function (e) {
+    $("#department-btn").one("focus", function (e) {
+      $(this).trigger("blur");
+    });
+  });
+  $("#addEmployeeModal").on("shown.bs.modal", function (e) {
+    $("#employee-btn").one("focus", function (e) {
+      $(this).trigger("blur");
+    });
+  });
+  $("#locationModal").on("shown.bs.modal", function (e) {
+    $("#location-btn").one("focus", function (e) {
+      $(this).trigger("blur");
+    });
+  });
   // PERSONNEL FORM HANDLERS
   $(document).on("submit", "#addEmployeeForm", createPersonnel);
   $(document).on("submit", "#editEmployeeForm", updatePersonnel);
@@ -17,7 +34,10 @@ $(function () {
   $(document).on("click", ".delete", deletePersonnel);
 
   // Department Modal CRUD
-  $(document).on("click", "#department-btn", departmentList);
+  $(document).on("click", "#department-btn", function () {
+    departmentList();
+  });
+
   $(document).on("click", ".editD", function () {
     var t = $(this);
     var dataId = t.data("id");
@@ -25,6 +45,7 @@ $(function () {
     $(`.saveD[data-id="${dataId}"]`).parent().toggleClass("d-none");
     $(`.name-department[data-id="${dataId}"]`).removeAttr("disabled");
     $(`select[data-id="${dataId}"]`).removeAttr("disabled");
+    $(`input[data-id="${dataId}"]`).trigger("focus");
   });
   $(document).on("click", ".cancelD", function () {
     var t = $(this);
@@ -45,18 +66,7 @@ $(function () {
     var t = $(this);
     var dataId = t.data("id");
     if (buttonPressed === "deleteD") {
-      $.confirm({
-        title: "Delete Department",
-        content: "Delete this department?",
-        buttons: {
-          confirm: function () {
-            deleteDepartment(dataId);
-          },
-          cancel: function () {
-            return;
-          },
-        },
-      });
+      deleteDepartment(dataId);
     }
   });
   $(document).on("submit", ".form-save", function (e) {
@@ -100,18 +110,7 @@ $(function () {
     var t = $(this);
     var dataId = t.data("id");
     if (buttonPressed === "deleteL") {
-      $.confirm({
-        title: "Delete Location",
-        content: "Delete this location?",
-        buttons: {
-          confirm: function () {
-            deleteLocation(dataId);
-          },
-          cancel: function () {
-            return;
-          },
-        },
-      });
+      deleteLocation(dataId);
     }
   });
   $(document).on("submit", "#addNewLocation", function (e) {
@@ -155,6 +154,7 @@ $(function () {
     t.parent().toggleClass("d-none");
     $(`.saveL[data-id="${dataId}"]`).parent().toggleClass("d-none");
     $(`.name-location[data-id="${dataId}"]`).removeAttr("disabled");
+    $(`input[data-id="${dataId}"]`).trigger("focus");
   });
   $(document).on("click", ".cancelL", function () {
     var t = $(this);
@@ -245,27 +245,51 @@ function departmentList() {
 
 function deleteDepartment(id) {
   $.ajax({
-    url: "libs/php/deleteDepartmentByID.php",
-    type: "POST",
-    cache: false,
+    url: "libs/php/getDepartmentByID.php",
+    dataType: "json",
     data: {
       id: id,
     },
     success: function (result) {
-      var json = JSON.parse(result);
-      var status = json.status;
+      var status = result.status;
       if (status.code === "400") {
-        $.alert(data.description);
+        $.alert(status.description);
         return;
       }
-
-      $(`.form-save[data-id="${id}"]`).remove();
-      $(".department-select").find("option:gt(0)").remove();
-      $.alert("Deleted!");
-      getAllDepartments();
-    },
-    error: function (response, status, error) {
-      $.alert(response.responseText);
+      $.confirm({
+        title: "Delete Department",
+        content: "Delete this department?",
+        buttons: {
+          confirm: function () {
+            $.ajax({
+              url: "libs/php/deleteDepartmentByID.php",
+              type: "POST",
+              cache: false,
+              data: {
+                id: id,
+              },
+              success: function (result) {
+                var json = JSON.parse(result);
+                var status = json.status;
+                if (status.code === "400") {
+                  $.alert(data.description);
+                  return;
+                }
+                $(`.form-save[data-id="${id}"]`).remove();
+                $(".department-select").find("option:gt(0)").remove();
+                $.alert("Deleted!");
+                getAllDepartments();
+              },
+              error: function (response, status, error) {
+                $.alert(response.responseText);
+              },
+            });
+          },
+          cancel: function () {
+            return;
+          },
+        },
+      });
     },
   });
 }
@@ -433,8 +457,7 @@ function deletePersonnel() {
             id: id,
           },
           success: function (data) {
-            var stringify = JSON.stringify(data);
-            var json = JSON.parse(stringify);
+            var json = JSON.parse(data);
             if (json.status["code"] !== "200") {
               $.alert("Personnel cannot be deleted.");
               return;
@@ -494,19 +517,44 @@ function updateLocation(id) {
 }
 function deleteLocation(id) {
   $.ajax({
-    url: "libs/php/deleteLocation.php",
-    type: "POST",
+    url: "libs/php/getLocationByID.php",
+    dataType: "json",
     data: {
       id: id,
     },
     success: function (result) {
-      var json = JSON.parse(result);
-      var status = json.status;
+      var status = result.status;
       if (status.code === "400") {
         $.alert(status.description);
         return;
       }
-      locationList();
+      $.confirm({
+        title: "Location Delete",
+        content: "Delete this location?",
+        buttons: {
+          confirm: function () {
+            $.ajax({
+              url: "libs/php/deleteLocation.php",
+              type: "POST",
+              data: {
+                id: id,
+              },
+              success: function (result) {
+                var json = JSON.parse(result);
+                var status = json.status;
+                if (status.code === "400") {
+                  $.alert(status.description);
+                  return;
+                }
+                locationList();
+              },
+            });
+          },
+          cancel: function () {
+            return;
+          },
+        },
+      });
     },
     error: function (req, status, err) {
       console.log(req.responseText);

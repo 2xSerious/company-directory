@@ -47,7 +47,7 @@ i.bi.bi-arrow-up-circle-fill::before {
   transition: background-color .3s,  opacity .5s, visibility .5s;
   opacity: 0;
   visibility: hidden;
-  z-index: 1000;
+  z-index: 900;
 }
 
 #back-to-btn.show-btn {
