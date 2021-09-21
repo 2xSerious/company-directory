@@ -27,6 +27,15 @@ $(function () {
       $(this).trigger("blur");
     });
   });
+  $("#editEmployeeModal").on("shown.bs.modal", function (e) {
+    $(".update").on("click", function (e) {
+      var that = $(this);
+      var dataId = that.data("id");
+      $(`.update[data-id="${dataId}"]`).one("focus", function (e) {
+        that.trigger("blur");
+      });
+    });
+  });
   // PERSONNEL FORM HANDLERS
   $(document).on("submit", "#addEmployeeForm", createPersonnel);
   $(document).on("submit", "#editEmployeeForm", updatePersonnel);
