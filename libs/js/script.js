@@ -369,7 +369,13 @@ function createPersonnel(e) {
     type: "POST",
     data: $("#addEmployeeForm").serialize(),
     cache: false,
-    success: function (data) {
+    success: function (result) {
+      var json = JSON.parse(result);
+      var data = json.status;
+      if (data.code === "400") {
+        $.alert(data.description);
+        return;
+      }
       $.alert("Personnel Added");
       getAll();
       $(".department-select").find("option:gt(0)").remove();
